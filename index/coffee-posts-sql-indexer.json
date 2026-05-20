@@ -1,0 +1,19 @@
+{
+  "name": "coffee-posts-sql-indexer",
+  "dataSourceName": "azuresql-1779304149610-datasource",
+  "targetIndexName": "coffee-posts-sql",
+  "skillsetName": "coffee-posts-sql-skillset",
+  "parameters": {
+    "batchSize": 500,
+    "maxFailedItems": 10,
+    "maxFailedItemsPerBatch": 5,
+    "configuration": {}
+  },
+  "fieldMappings": [
+    { "sourceFieldName": "tags", "targetFieldName": "tags",
+      "mappingFunction": { "name": "jsonArrayToStringCollection" } }
+  ],
+  "outputFieldMappings": [
+    { "sourceFieldName": "/document/chunkVector", "targetFieldName": "chunkVector" }
+  ]
+}

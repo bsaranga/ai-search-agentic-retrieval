@@ -1,0 +1,13 @@
+{
+  "name": "coffee-posts-sql-ds",
+  "description": "Azure SQL view aggregating Stack Exchange coffee posts.",
+  "type": "azuresql",
+  "credentials": {
+    "connectionString": "Server=tcp:seminar.database.windows.net,1433;Database=seminar-db;User ID=<user>;Password=<password>;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  },
+  "container": { "name": "vw_CoffeePostsFlat" },
+  "dataChangeDetectionPolicy": {
+    "@odata.type": "#Microsoft.Azure.Search.HighWaterMarkChangeDetectionPolicy",
+    "highWaterMarkColumnName": "LastActivityDateHWM"
+  }
+}

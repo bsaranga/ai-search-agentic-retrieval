@@ -1,0 +1,23 @@
+{
+  "name": "coffee-posts-sql-skillset",
+  "description": "Embed the `chunk` field with Azure OpenAI text-embedding-3-small.",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "embed-chunk",
+      "description": "Generate a 1536-dim embedding for each row's chunk.",
+      "context": "/document",
+      "resourceUri": "https://<your-aoai>.openai.azure.com",
+      "deploymentId": "text-embedding-3-small",
+      "modelName": "text-embedding-3-small",
+      "dimensions": 1536,
+      "apiKey": "<aoai-api-key>",
+      "inputs": [
+        { "name": "text", "source": "/document/chunk" }
+      ],
+      "outputs": [
+        { "name": "embedding", "targetName": "chunkVector" }
+      ]
+    }
+  ]
+}
