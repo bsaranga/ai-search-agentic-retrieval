@@ -15,6 +15,8 @@ import os
 import re
 import struct
 from datetime import datetime
+from html.parser import HTMLParser
+from io import StringIO
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -79,6 +81,42 @@ CREATE INDEX IX_PostTags_TagName ON dbo.PostTags(TagName);
 """
 
 
+class _HTMLStripper(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self._buf = StringIO()
+
+    def handle_data(self, data: str) -> None:
+        self._buf.write(data)
+
+    def handle_starttag(self, tag: str, attrs) -> None:
+        if tag in ("p", "br", "div", "li", "tr"):
+            self._buf.write("\n")
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in ("p", "div", "li", "tr", "h1", "h2", "h3", "h4", "h5", "h6"):
+            self._buf.write("\n")
+
+    def get_text(self) -> str:
+        return self._buf.getvalue()
+
+
+_WS_RE = re.compile(r"[ \t]+")
+_NL_RE = re.compile(r"\n{3,}")
+
+
+def strip_html(s: str | None) -> str | None:
+    if not s:
+        return s
+    p = _HTMLStripper()
+    p.feed(s)
+    p.close()
+    text = p.get_text()
+    text = _WS_RE.sub(" ", text)
+    text = _NL_RE.sub("\n\n", text)
+    return text.strip()
+
+
 def parse_dt(s: str | None) -> datetime | None:
     if not s:
         return None
@@ -136,7 +174,7 @@ def load_users(cur: pyodbc.Cursor, xml_dir: Path) -> int:
             parse_dt(r.get("CreationDate")),
             parse_dt(r.get("LastAccessDate")),
             r.get("Location"),
-            r.get("AboutMe"),
+            strip_html(r.get("AboutMe")),
             parse_int(r.get("Views")),
             parse_int(r.get("UpVotes")),
             parse_int(r.get("DownVotes")),
@@ -187,7 +225,7 @@ def load_posts(cur: pyodbc.Cursor, xml_dir: Path) -> tuple[int, int]:
             parse_int(r.get("AnswerCount")),
             parse_int(r.get("CommentCount")),
             r.get("Title"),
-            r.get("Body"),
+            strip_html(r.get("Body")),
             parse_int(r.get("OwnerUserId")),
             r.get("OwnerDisplayName"),
             r.get("Tags"),

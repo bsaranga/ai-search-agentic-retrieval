@@ -3,25 +3,25 @@
   "fields": [
     { "name": "id", "type": "Edm.String", "key": true, "filterable": true },
     { "name": "kind", "type": "Edm.String", "filterable": true, "facetable": true, "retrievable": true },
-    { "name": "questionId", "type": "Edm.String", "filterable": true, "sortable": true, "facetable": true, "retrievable": true },
+    { "name": "questionId", "type": "Edm.String", "filterable": true, "sortable": true, "retrievable": true },
 
     { "name": "title", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft", "retrievable": true },
-    { "name": "body",  "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft", "retrievable": true },
+    { "name": "body",  "type": "Edm.String" },
     { "name": "chunk", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft", "retrievable": false },
     { "name": "chunkVector", "type": "Collection(Edm.Single)", "searchable": true, "retrievable": false, "dimensions": 1536, "vectorSearchProfile": "default-profile" },
 
     { "name": "tags", "type": "Collection(Edm.String)", "searchable": true, "filterable": true, "facetable": true, "retrievable": true },
 
-    { "name": "score",        "type": "Edm.Int32", "filterable": true, "sortable": true, "facetable": true, "retrievable": true },
+    { "name": "score",        "type": "Edm.Int32", "filterable": true, "sortable": true, "retrievable": true },
     { "name": "parentScore",  "type": "Edm.Int32", "filterable": true, "sortable": true, "retrievable": true },
     { "name": "viewCount",    "type": "Edm.Int32", "filterable": true, "sortable": true, "retrievable": true },
     { "name": "answerCount",  "type": "Edm.Int32", "filterable": true, "sortable": true, "retrievable": true },
     { "name": "commentCount", "type": "Edm.Int32", "filterable": true, "sortable": true, "retrievable": true },
 
-    { "name": "isAccepted",       "type": "Edm.Boolean", "filterable": true, "facetable": true, "retrievable": true },
+    { "name": "isAccepted",       "type": "Edm.Boolean", "filterable": true, "retrievable": true },
     { "name": "acceptedAnswerId", "type": "Edm.String",  "filterable": true, "retrievable": true },
 
-    { "name": "creationDate",     "type": "Edm.DateTimeOffset", "filterable": true, "sortable": true, "facetable": true, "retrievable": true },
+    { "name": "creationDate",     "type": "Edm.DateTimeOffset", "filterable": true, "sortable": true, "retrievable": true },
     { "name": "lastActivityDate", "type": "Edm.DateTimeOffset", "filterable": true, "sortable": true, "retrievable": true },
 
     { "name": "ownerUserId",      "type": "Edm.String", "filterable": true, "retrievable": true },
