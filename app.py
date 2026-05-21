@@ -115,6 +115,18 @@ def render_debug(resp: dict) -> None:
             st.markdown(body[:1500] + ("..." if len(body) > 1500 else ""))
 
 
+def render_sources(passages: list[dict]) -> None:
+    """Compact source list shown inline at the end of an assistant message."""
+    if not passages:
+        return
+    with st.expander(f"Sources ({len(passages)})"):
+        for i, p in enumerate(passages, 1):
+            title = p.get("title") or "(no title)"
+            url = p.get("url") or ""
+            link = f"[{title}]({url})" if url else f"**{title}**"
+            st.markdown(f"{i}. {link}")
+
+
 SYSTEM_PROMPT = """\
 You answer questions about coffee using passages retrieved from the Coffee
 Stack Exchange community. Lead with a direct, practical 1–3 sentence
@@ -161,6 +173,8 @@ if "history" not in st.session_state:
 for msg in st.session_state.history:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
+        if msg["role"] == "assistant":
+            render_sources((msg.get("search_response") or {}).get("value", []))
 
 if question := st.chat_input("Ask a coffee question..."):
     st.session_state.history.append({"role": "user", "content": question})
@@ -172,6 +186,7 @@ if question := st.chat_input("Ask a coffee question..."):
             resp = retrieve(question)
         passages = resp.get("value", [])
         answer = st.write_stream(synthesize_stream(question, passages))
+        render_sources(passages)
 
     st.session_state.history.append(
         {"role": "assistant", "content": answer, "search_response": resp}
