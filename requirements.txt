@@ -17,3 +17,6 @@ pypdf==6.11.0
 pypdfium2==5.8.0
 pytesseract==0.3.13
 python-dotenv==1.2.1
+azure-search-documents>=11.6.0b12
+openai>=1.40
+streamlit>=1.36
