@@ -1,0 +1,11 @@
+Question: {{ question }}
+
+Retrieved passages:
+{% for p in passages -%}
+[{{ loop.index }}] title: {{ p.title }}
+kind: {{ p.kind }} | score: {{ p.score }} | accepted: {{ p.isAccepted }}
+{{ p.body }}
+{% if not loop.last %}
+---
+{% endif %}
+{% endfor %}
